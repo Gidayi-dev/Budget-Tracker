@@ -1,5 +1,6 @@
 import fs from "fs";
 import { Command } from "commander";
+import chalk from "chalk";
 
 const program = new Command();
 
@@ -39,13 +40,13 @@ program
     const existingEntry = budgets.find((entry) => entry.title === title);
 
     if (existingEntry) {
-      console.log(`An entry with the title '${title}' already exists.`);
+      console.log(chalk.bgRed(`An entry with the title '${title}' already exists.`));
       return;
     }
 
     budgets.push(newEntry);
     saveBudgets(budgets);
-    console.log(`New budget entry '${title}' added successfully.`);
+    console.log(chalk.green(`New budget entry '${title}' added successfully.`));
   });
 
 
@@ -60,7 +61,7 @@ program
 
     const entry = budgets.find((entry) => entry.title === title);
     if (!entry) {
-      console.log(`Budget entry with title '${title}' not found.`);
+      console.log(chalk.bgRed(`Budget entry with title '${title}' not found.`));
       return;
     }
 
@@ -68,7 +69,7 @@ program
     entry.updatedAt = new Date();
 
     saveBudgets(budgets);
-    console.log(`Budget entry '${title}' updated successfully.`);
+    console.log(chalk.green(`Budget entry '${title}' updated successfully.`));
   });
 
 
@@ -83,22 +84,22 @@ program
     if (title) {
       const entry = budgets.find((entry) => entry.title === title);
       if (entry) {
-        console.log("Budget Entry Details:");
-        console.log(`Title: ${entry.title}`);
+        console.log(chalk.cyan("Budget Entry Details:"));
+        console.log(chalk.yellow(`Title: ${entry.title}`));
         console.log(`Amount: ${entry.amount}`);
         console.log(`Created At: ${entry.createdAt}`);
         console.log(`Last Updated: ${entry.updatedAt}`);
       } else {
-        console.log(`No budget entry found with the title '${title}'.`);
+        console.log(chalk.bgRed(`No budget entry found with the title '${title}'.`));
       }
     } else {
       if (budgets.length === 0) {
-        console.log("No budget entries available.");
+        console.log(chalk.bgGray("No budget entries available."));
       } else {
-        console.log("All Budget Entries:");
+        console.log(chalk.cyan("All Budget Entries:"));
         budgets.forEach((entry) => {
-          console.log("-------------");
-          console.log(`Title: ${entry.title}`);
+          console.log(chalk.blue("----------------"));
+          console.log(chalk.yellow(`Title: ${entry.title}`));
           console.log(`Amount: ${entry.amount}`);
           console.log(`Created At: ${entry.createdAt}`);
           console.log(`Last Updated: ${entry.updatedAt}`);
@@ -106,6 +107,7 @@ program
       }
     }
   });
+
 
 program
   .command("delete")
@@ -117,12 +119,12 @@ program
 
     const filteredBudgets = budgets.filter((entry) => entry.title !== title);
     if (filteredBudgets.length === budgets.length) {
-      console.log(`No budget entry found with the title '${title}'.`);
+      console.log(chalk.bgRed(`No budget entry found with the title '${title}'.`));
       return;
     }
 
     saveBudgets(filteredBudgets);
-    console.log(`Budget entry with title '${title}' deleted successfully.`);
+    console.log(chalk.green(`Budget entry with title '${title}' deleted successfully.`));
   });
 
 program.parse(process.argv);
